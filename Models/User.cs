@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace BankofDotNet.Models;
+namespace BankOfDotNet.Models;
 
 public class User : IdentityUser<Guid>
 {

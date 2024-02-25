@@ -1,6 +1,6 @@
-@BankofDotNet_HostAddress = http://localhost:5298
+@BankOfDotNet_HostAddress = http://localhost:5298
 
-GET {{BankofDotNet_HostAddress}}/weatherforecast/
+GET {{BankOfDotNet_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

@@ -9,17 +9,17 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["BankofDotNet.csproj", "."]
-RUN dotnet restore "./BankofDotNet.csproj"
+COPY ["BankOfDotNet.csproj", "."]
+RUN dotnet restore "./BankOfDotNet.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "./BankofDotNet.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./BankOfDotNet.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./BankofDotNet.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./BankOfDotNet.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BankofDotNet.dll"]
+ENTRYPOINT ["dotnet", "BankOfDotNet.dll"]

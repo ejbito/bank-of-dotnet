@@ -1,4 +1,4 @@
-﻿namespace BankofDotNet.Enums;
+﻿namespace BankOfDotNet.Enums;
 
 public enum BankTransactionType
 {

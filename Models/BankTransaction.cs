@@ -1,8 +1,8 @@
-﻿using BankofDotNet.Enums;
+﻿using BankOfDotNet.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BankofDotNet.Models;
+namespace BankOfDotNet.Models;
 
 public class BankTransaction
 {
