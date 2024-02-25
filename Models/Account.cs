@@ -6,6 +6,7 @@ namespace BankOfDotNet.Models;
 
 public class Account
 {
+    [Key]
     public Guid AccountId { get; set; } = Guid.NewGuid();
     public string BSB { get; set; }
     public string ACC { get; set; }
@@ -15,10 +16,8 @@ public class Account
     [Column(TypeName = "decimal(18, 2)")]
     public decimal Balance { get; set; }
 
-    // Foreign Key for User
     public Guid UserId { get; set; }
     public virtual User User { get; set; }
 
-    // Navigation property to Transactions
     public virtual ICollection<BankTransaction> Transactions { get; set; } = new List<BankTransaction>();
 }

@@ -41,20 +41,23 @@ public class AppDbContext : DbContext
         // BankTransaction
         modelBuilder.Entity<BankTransaction>()
             .HasOne(t => t.Account)
-            .WithMany()
-            .HasForeignKey(t => t.AccountId);
+            .WithMany(a => a.Transactions)
+            .HasForeignKey(t => t.AccountId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<BankTransaction>()
-        .HasOne(t => t.FromAccount)
-        .WithMany()
-        .HasForeignKey(t => t.FromAccountId)
-        .IsRequired(false);
+            .HasOne(t => t.FromAccount)
+            .WithMany()
+            .HasForeignKey(t => t.FromAccountId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<BankTransaction>()
             .HasOne(t => t.ToAccount)
             .WithMany()
             .HasForeignKey(t => t.ToAccountId)
-            .IsRequired(false);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<BankTransaction>()
             .HasCheckConstraint("CK_BankTransaction_FromToAccount", "FromAccountId != ToAccountId");
