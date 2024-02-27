@@ -5,9 +5,9 @@ namespace BankofDotNet.Repository.Interface;
 
 public interface IUserRepository
 {
-    public Task<IdentityResult> CreateAsync(User user, string password);
-    public Task<IdentityResult> DeleteAsync(User user);
-    public Task<User> FindByEmailAsync(string email);
-    public Task<User> FindByIdAsync(Guid userId);
-    public Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword);
+    Task<IdentityResult> CreateAsync(User user, string password);
+    Task<IdentityResult> DeleteAsync(User user);
+    Task<User> FindByEmailAsync(string email);
+    Task<User> FindByIdAsync(Guid userId);
+    Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword);
 }
