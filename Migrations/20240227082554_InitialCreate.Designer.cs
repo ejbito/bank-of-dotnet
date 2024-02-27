@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BankOfDotNet.Migrations
+namespace BankofDotNet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240225065938_InitialCreate")]
+    [Migration("20240227082554_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -66,7 +66,7 @@ namespace BankOfDotNet.Migrations
                     b.HasIndex("BSB", "ACC")
                         .IsUnique();
 
-                    b.ToTable("Account");
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("BankOfDotNet.Models.BankTransaction", b =>
