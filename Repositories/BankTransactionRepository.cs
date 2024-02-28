@@ -14,7 +14,7 @@ public class BankTransactionRepository : IBankTransactionRepository
         _context = context;
     }
 
-    public async Task<BankTransaction> AddBankTransactionAsync(BankTransaction transaction)
+    public async Task<BankTransaction> AddTransactionAsync(BankTransaction transaction)
     {
         _context.BankTransactions.Add(transaction);
         await _context.SaveChangesAsync();
