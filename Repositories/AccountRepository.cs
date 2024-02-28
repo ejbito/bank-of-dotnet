@@ -1,4 +1,5 @@
-﻿using BankofDotNet.Repository.Interface;
+﻿using BankofDotNet.DTOs.Account;
+using BankofDotNet.Repository.Interface;
 using BankOfDotNet.Data;
 using BankOfDotNet.Models;
 using Microsoft.EntityFrameworkCore;
@@ -33,15 +34,36 @@ public class AccountRepository : IAccountRepository
         return false;
     }
 
-    public async Task<Account> GetAccountByIdAsync(Guid accountId)
+    public async Task<Account> FindByIdAsync(Guid accountId)
     {
         return await _context.Accounts.FindAsync(accountId);
     }
 
-    public async Task<IEnumerable<Account>> GetUserAccountsAsync(Guid userId)
+    public async Task<AccountReadDto> GetAccountByIdAsync(Guid accountId)
+    {
+        return await _context.Accounts
+            .Where(a => a.AccountId == accountId)
+            .Select(a => new AccountReadDto
+            {
+                AccountId = a.AccountId,
+                UserId = a.UserId,
+                AccountType = a.AccountType,
+                Balance = a.Balance
+            })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<IEnumerable<AccountReadDto>> GetUserAccountsAsync(Guid userId)
     {
         return await _context.Accounts
             .Where(a => a.UserId == userId)
+            .Select(a => new AccountReadDto
+            {
+                AccountId = a.AccountId,
+                UserId = a.UserId,
+                AccountType = a.AccountType,
+                Balance = a.Balance
+            })
             .ToListAsync();
     }
 
