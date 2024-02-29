@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BankOfDotNet.Migrations
+namespace BankofDotNet.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -40,7 +40,7 @@ namespace BankOfDotNet.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Account",
+                name: "Accounts",
                 columns: table => new
                 {
                     AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -54,9 +54,9 @@ namespace BankOfDotNet.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Account", x => x.AccountId);
+                    table.PrimaryKey("PK_Accounts", x => x.AccountId);
                     table.ForeignKey(
-                        name: "FK_Account_Users_UserId",
+                        name: "FK_Accounts_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -80,34 +80,34 @@ namespace BankOfDotNet.Migrations
                     table.PrimaryKey("PK_BankTransactions", x => x.TransactionId);
                     table.CheckConstraint("CK_BankTransaction_FromToAccount", "FromAccountId != ToAccountId");
                     table.ForeignKey(
-                        name: "FK_BankTransactions_Account_AccountId",
+                        name: "FK_BankTransactions_Accounts_AccountId",
                         column: x => x.AccountId,
-                        principalTable: "Account",
+                        principalTable: "Accounts",
                         principalColumn: "AccountId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BankTransactions_Account_FromAccountId",
+                        name: "FK_BankTransactions_Accounts_FromAccountId",
                         column: x => x.FromAccountId,
-                        principalTable: "Account",
+                        principalTable: "Accounts",
                         principalColumn: "AccountId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BankTransactions_Account_ToAccountId",
+                        name: "FK_BankTransactions_Accounts_ToAccountId",
                         column: x => x.ToAccountId,
-                        principalTable: "Account",
+                        principalTable: "Accounts",
                         principalColumn: "AccountId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Account_BSB_ACC",
-                table: "Account",
+                name: "IX_Accounts_BSB_ACC",
+                table: "Accounts",
                 columns: new[] { "BSB", "ACC" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Account_UserId",
-                table: "Account",
+                name: "IX_Accounts_UserId",
+                table: "Accounts",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -133,7 +133,7 @@ namespace BankOfDotNet.Migrations
                 name: "BankTransactions");
 
             migrationBuilder.DropTable(
-                name: "Account");
+                name: "Accounts");
 
             migrationBuilder.DropTable(
                 name: "Users");

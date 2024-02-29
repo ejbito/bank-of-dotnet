@@ -1,3 +1,9 @@
+using BankofDotNet.Repositories;
+using BankofDotNet.Repositories.Interfaces;
+using BankofDotNet.Repository;
+using BankofDotNet.Repository.Interface;
+using BankofDotNet.Services;
+using BankofDotNet.Services.Interfaces;
 using BankOfDotNet.Data;
 using BankOfDotNet.Models;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +28,17 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>() // IdentityRole for str
 // Configure Password Hasher
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
-//Configure Services
+// Configure Repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IBankTransactionRepository, BankTransactionRepository>();
+builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+
+// Configure Services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IBankTransactionService, BankTransactionService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 // Configure Swagger/OpenAPI
 

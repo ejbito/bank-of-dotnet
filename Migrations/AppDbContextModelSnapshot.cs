@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BankOfDotNet.Migrations
+namespace BankofDotNet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -63,7 +63,7 @@ namespace BankOfDotNet.Migrations
                     b.HasIndex("BSB", "ACC")
                         .IsUnique();
 
-                    b.ToTable("Account");
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("BankOfDotNet.Models.BankTransaction", b =>
