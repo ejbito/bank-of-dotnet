@@ -10,4 +10,5 @@ public interface IAccountService
     Task<bool> UpdateAcountAsync(Guid accountId, Guid userId, AccountUpdateDto accountUpdateDto);
     Task<bool> UpdateAccountPinAsync(Guid accountId, Guid userId, AccountUpdatePinDto accountPinDto);
     Task<bool> DeleteAccountAsync(Guid accountId, Guid userId);
+    Task<(string BSB, string ACC)> GenerateUniqueBSBAndACCAsync();
 }

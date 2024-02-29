@@ -47,6 +47,8 @@ public class AccountRepository : IAccountRepository
             {
                 AccountId = a.AccountId,
                 UserId = a.UserId,
+                BSB = a.BSB,
+                ACC = a.ACC,
                 AccountType = a.AccountType,
                 Balance = a.Balance
             })
@@ -61,10 +63,17 @@ public class AccountRepository : IAccountRepository
             {
                 AccountId = a.AccountId,
                 UserId = a.UserId,
+                BSB = a.BSB,
+                ACC = a.ACC,
                 AccountType = a.AccountType,
                 Balance = a.Balance
             })
             .ToListAsync();
+    }
+
+    public async Task<bool> IsUniqueBSBAndACC(string bsb, string acc)
+    {
+        return !await _context.Accounts.AnyAsync(a => a.BSB == bsb && a.ACC == acc);
     }
 
     public async Task<bool> UpdateAsync(Account account)

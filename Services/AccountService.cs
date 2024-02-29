@@ -5,6 +5,8 @@ using BankOfDotNet.Data;
 using BankOfDotNet.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Tokens;
+
 
 namespace BankofDotNet.Services;
 
@@ -13,6 +15,7 @@ public class AccountService : IAccountService
     private readonly AccountRepository _accountRepository;
     private readonly UserRepository _userRepository;
     private readonly IPasswordHasher<User> _passwordHasher;
+    private Random _random = new Random();
 
     public AccountService(AccountRepository accountRepository, UserRepository userRepository, IPasswordHasher<User> passwordHasher)
     {
@@ -26,12 +29,17 @@ public class AccountService : IAccountService
         var user = await _userRepository.FindByIdAsync(userId);
         if (user == null)
         {
-            throw new KeyNotFoundException();
+            throw new KeyNotFoundException("User not found.");
         }
+
+        var (bsb, acc) = await GenerateUniqueBSBAndACCAsync();
+
         var newAccount = new Account
         {
             UserId = userId,
             AccountType = accountCreateDto.AccountType,
+            BSB = bsb,
+            ACC = acc,
             Balance = 0,
             Pin = _passwordHasher.HashPassword(null, accountCreateDto.Pin.ToString()),
             CreatedAt = DateTime.UtcNow
@@ -41,6 +49,8 @@ public class AccountService : IAccountService
         {
             AccountId = newAccount.AccountId,
             UserId = newAccount.UserId,
+            BSB = newAccount.BSB,
+            ACC = newAccount.ACC,
             AccountType = newAccount.AccountType,
             Balance = newAccount.Balance,
         };
@@ -59,6 +69,19 @@ public class AccountService : IAccountService
         }
         await _accountRepository.DeleteAsync(accountId);
         return true;
+    }
+
+    public async Task<(string BSB, string ACC)> GenerateUniqueBSBAndACCAsync()
+    {
+        string bsb, acc;
+        do
+        {
+            bsb = GenerateRandomNumber(6);
+            acc = GenerateRandomNumber(9);
+        }
+        while (!await _accountRepository.IsUniqueBSBAndACC(bsb, acc));
+
+        return (bsb, acc);
     }
 
     public async Task<AccountReadDto> GetAccountByIdAsync(Guid accountId)
@@ -119,5 +142,11 @@ public class AccountService : IAccountService
         account.AccountType = accountUpdateDto.AccountType;
         await _accountRepository.UpdateAsync(account);
         return true;
+    }
+
+    private string GenerateRandomNumber(int length)
+    {
+        var chars = Enumerable.Range(0, length).Select(_ => (char)('0' + _random.Next(0, 10))).ToArray();
+        return new string(chars);
     }
 }

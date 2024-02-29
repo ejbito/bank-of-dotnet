@@ -11,4 +11,5 @@ public interface IAccountRepository
     Task<AccountReadDto> GetAccountByIdAsync(Guid accountId);
     Task<IEnumerable<AccountReadDto>> GetUserAccountsAsync(Guid accountId);
     Task<bool> UpdateAsync(Account account);
+    Task<bool> IsUniqueBSBAndACC(string bsb, string acc);
 }
