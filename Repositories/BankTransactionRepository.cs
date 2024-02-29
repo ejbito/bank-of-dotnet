@@ -2,6 +2,7 @@
 using BankOfDotNet.Data;
 using BankOfDotNet.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace BankofDotNet.Repository;
 
@@ -14,31 +15,31 @@ public class BankTransactionRepository : IBankTransactionRepository
         _context = context;
     }
 
-    public async Task<BankTransaction> AddTransactionAsync(BankTransaction transaction)
+    public async Task<BankTransaction> CreateAsync(BankTransaction transaction)
     {
         _context.BankTransactions.Add(transaction);
         await _context.SaveChangesAsync();
         return transaction;
     }
 
-    public async Task<Account> FindAccountByIdAsync(Guid accountId)
+    public async Task<BankTransaction> FindByTransactionIdAsync(Guid transactionId)
     {
-        return await _context.Accounts.FindAsync(accountId);
+        var transaction = await _context.BankTransactions.FindAsync(transactionId);
+        if (transaction == null)
+        {
+            throw new KeyNotFoundException("Account not found.");
+        }
+        return transaction;
     }
 
-    public async Task<BankTransaction> FindBankTransactionByIdAsync(Guid transactionId)
-    {
-        return await _context.BankTransactions.FindAsync(transactionId);
-    }
-
-    public async Task<IEnumerable<BankTransaction>> GetBankTransactionsByAccountIdAsync(Guid accountId)
+    public async Task<IEnumerable<BankTransaction>> FindByAccountIdAsync(Guid accountId)
     {
         return await _context.BankTransactions
             .Where(t => t.AccountId == accountId || t.FromAccountId == accountId || t.ToAccountId == accountId)
             .ToListAsync();
     }
 
-    public async Task UpdateAccountBalanceAsync(Guid accountId, decimal newBalance)
+    public async Task UpdateBalanceAsync(Guid accountId, decimal newBalance)
     {
         var account = await _context.Accounts.FindAsync(accountId);
         if (account != null)

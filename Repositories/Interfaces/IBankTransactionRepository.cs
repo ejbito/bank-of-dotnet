@@ -4,9 +4,8 @@ namespace BankofDotNet.Repository.Interface;
 
 public interface IBankTransactionRepository
 {
-    Task<BankTransaction> AddTransactionAsync(BankTransaction transaction);
-    Task<BankTransaction> FindBankTransactionByIdAsync(Guid transactionId);
-    Task<IEnumerable<BankTransaction>> GetBankTransactionsByAccountIdAsync(Guid accountId);
-    Task<Account> FindAccountByIdAsync(Guid accountId);
-    Task UpdateAccountBalanceAsync(Guid accountId, decimal balance);
+    Task<BankTransaction> CreateAsync(BankTransaction transaction);
+    Task<BankTransaction> FindByTransactionIdAsync(Guid transactionId);
+    Task<IEnumerable<BankTransaction>> FindByAccountIdAsync(Guid accountId);
+    Task UpdateBalanceAsync(Guid accountId, decimal balance);
 }

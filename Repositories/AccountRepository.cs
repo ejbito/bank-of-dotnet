@@ -36,44 +36,24 @@ public class AccountRepository : IAccountRepository
 
     public async Task<Account> FindByIdAsync(Guid accountId)
     {
-        return await _context.Accounts.FindAsync(accountId);
-    }
-
-    public async Task<AccountReadDto> GetAccountByIdAsync(Guid accountId)
-    {
-        return await _context.Accounts
-            .Where(a => a.AccountId == accountId)
-            .Select(a => new AccountReadDto
-            {
-                AccountId = a.AccountId,
-                UserId = a.UserId,
-                BSB = a.BSB,
-                ACC = a.ACC,
-                AccountType = a.AccountType,
-                Balance = a.Balance
-            })
-            .FirstOrDefaultAsync();
-    }
-
-    public async Task<IEnumerable<AccountReadDto>> GetUserAccountsAsync(Guid userId)
-    {
-        return await _context.Accounts
-            .Where(a => a.UserId == userId)
-            .Select(a => new AccountReadDto
-            {
-                AccountId = a.AccountId,
-                UserId = a.UserId,
-                BSB = a.BSB,
-                ACC = a.ACC,
-                AccountType = a.AccountType,
-                Balance = a.Balance
-            })
-            .ToListAsync();
+        var account = await _context.Accounts.FindAsync(accountId);
+        if (account == null)
+        {
+            throw new KeyNotFoundException("Account not found.");
+        }
+        return account;
     }
 
     public async Task<bool> IsUniqueBSBAndACC(string bsb, string acc)
     {
         return !await _context.Accounts.AnyAsync(a => a.BSB == bsb && a.ACC == acc);
+    }
+
+    public async Task<IEnumerable<Account>> GetUserAccountsAsync(Guid userId)
+    {
+        return await _context.Accounts
+            .Where(a => a.UserId == userId)
+            .ToListAsync();
     }
 
     public async Task<bool> UpdateAsync(Account account)
