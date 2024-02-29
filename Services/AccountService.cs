@@ -1,4 +1,5 @@
 ﻿using BankofDotNet.DTOs.Account;
+using BankofDotNet.DTOs.BankTransaction;
 using BankofDotNet.Repository;
 using BankofDotNet.Services.Interfaces;
 using BankOfDotNet.Data;
@@ -24,7 +25,7 @@ public class AccountService : IAccountService
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<AccountReadDto> CreateAccountAsync(Guid userId, AccountCreateDto accountCreateDto)
+    public async Task<AccountReadDto> CreateAsync(Guid userId, AccountCreateDto dto)
     {
         var user = await _userRepository.FindByIdAsync(userId);
         if (user == null)
@@ -37,11 +38,11 @@ public class AccountService : IAccountService
         var newAccount = new Account
         {
             UserId = userId,
-            AccountType = accountCreateDto.AccountType,
+            AccountType = dto.AccountType,
             BSB = bsb,
             ACC = acc,
             Balance = 0,
-            Pin = _passwordHasher.HashPassword(null, accountCreateDto.Pin.ToString()),
+            Pin = _passwordHasher.HashPassword(null, dto.Pin.ToString()),
             CreatedAt = DateTime.UtcNow
         };
         await _accountRepository.CreateAsync(newAccount);
@@ -56,7 +57,7 @@ public class AccountService : IAccountService
         };
     }
 
-    public async Task<bool> DeleteAccountAsync(Guid accountId, Guid userId)
+    public async Task<bool> DeleteAsync(Guid accountId, Guid userId)
     {
         var account = await _accountRepository.FindByIdAsync(accountId);
         if (account == null)
@@ -84,17 +85,17 @@ public class AccountService : IAccountService
         return (bsb, acc);
     }
 
-    public async Task<AccountReadDto> GetAccountByIdAsync(Guid accountId)
+    public async Task<AccountReadDto> GetByIdAsync(Guid accountId)
     {
-        var account = await _accountRepository.GetAccountByIdAsync(accountId);
+        var account = await _accountRepository.FindByIdAsync(accountId);
         if (account == null)
         {
             throw new KeyNotFoundException("Account not found");
         }
-        return account;
+        return ReadDto(account);
     }
 
-    public async Task<IEnumerable<AccountReadDto>> GetUserAccountsAsync(Guid userId)
+    public async Task<IEnumerable<AccountReadDto>> GetAllByUserIdAsync(Guid userId)
     {
         var user = await _userRepository.FindByIdAsync(userId);
         if (user == null)
@@ -102,10 +103,10 @@ public class AccountService : IAccountService
             throw new KeyNotFoundException("User not found.");
         }
         var accounts = await _accountRepository.GetUserAccountsAsync(userId);
-        return accounts;
+        return accounts.Select(account => ReadDto(account)).ToList();
     }
 
-    public async Task<bool> UpdateAccountPinAsync(Guid accountId, Guid userId, AccountUpdatePinDto accountPinDto)
+    public async Task<bool> UpdatePinAsync(Guid accountId, Guid userId, AccountUpdatePinDto accountPinDto)
     {
         var account = await _accountRepository.FindByIdAsync(accountId);
         if (account == null)
@@ -128,7 +129,7 @@ public class AccountService : IAccountService
         return true;
     }
 
-    public async Task<bool> UpdateAcountAsync(Guid accountId, Guid userId, AccountUpdateDto accountUpdateDto)
+    public async Task<bool> UpdateAsync(Guid accountId, Guid userId, AccountUpdateDto dto)
     {
         var account = await _accountRepository.FindByIdAsync(accountId);
         if (account == null)
@@ -139,7 +140,7 @@ public class AccountService : IAccountService
         {
             throw new UnauthorizedAccessException("You do not have permission to update this account.");
         }
-        account.AccountType = accountUpdateDto.AccountType;
+        account.AccountType = dto.AccountType;
         await _accountRepository.UpdateAsync(account);
         return true;
     }
@@ -148,5 +149,18 @@ public class AccountService : IAccountService
     {
         var chars = Enumerable.Range(0, length).Select(_ => (char)('0' + _random.Next(0, 10))).ToArray();
         return new string(chars);
+    }
+
+    private static AccountReadDto ReadDto(Account account)
+    {
+        return new AccountReadDto
+        {
+            AccountId = account.AccountId,
+            UserId = account.UserId,
+            BSB = account.BSB,
+            ACC = account.ACC,
+            AccountType = account.AccountType,
+            Balance = account.Balance,
+        };
     }
 }

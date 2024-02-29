@@ -33,7 +33,7 @@ public class BankTransactionService : IBankTransactionService
             throw new InvalidOperationException("Insufficient funds.");
         }
         account.Balance += amount;
-        await _bankTransactionRepository.UpdateAccountBalanceAsync(accountId, account.Balance);
+        await _bankTransactionRepository.UpdateBalanceAsync(accountId, account.Balance);
         var transaction = new BankTransaction
         {
             AccountId = accountId,
@@ -41,13 +41,13 @@ public class BankTransactionService : IBankTransactionService
             BankTransactionType = BankTransactionType.Deposit,
             CreatedAt = DateTime.UtcNow,
         };
-        await _bankTransactionRepository.AddTransactionAsync(transaction);
+        await _bankTransactionRepository.CreateAsync(transaction);
         return ReadDto(transaction);
     }
 
-    public async Task<IEnumerable<BankTransactionReadDto>> GetBankTransactionByAccountId(Guid accountId)
+    public async Task<IEnumerable<BankTransactionReadDto>> GetTransactionsByAccountAsync(Guid accountId)
     {
-        var transactions = await _bankTransactionRepository.GetBankTransactionsByAccountIdAsync(accountId);
+        var transactions = await _bankTransactionRepository.FindByAccountIdAsync(accountId);
         if (transactions == null)
         {
             throw new KeyNotFoundException();
@@ -55,9 +55,9 @@ public class BankTransactionService : IBankTransactionService
         return transactions.Select(t => ReadDto(t)).ToList();
     }
 
-    public async Task<BankTransactionReadDto> GetBankTransactionByTransactionId(Guid transactionId)
+    public async Task<BankTransactionReadDto> GetTransactionByIdAsync(Guid transactionId)
     {
-        var transaction = await _bankTransactionRepository.FindBankTransactionByIdAsync(transactionId);
+        var transaction = await _bankTransactionRepository.FindByTransactionIdAsync(transactionId);
         if (transaction == null)
         {
             throw new KeyNotFoundException();
@@ -79,8 +79,8 @@ public class BankTransactionService : IBankTransactionService
         }
         fromAccount.Balance -= amount;
         toAccount.Balance += amount;
-        await _bankTransactionRepository.UpdateAccountBalanceAsync(fromAccountId, fromAccount.Balance);
-        await _bankTransactionRepository.UpdateAccountBalanceAsync(toAccountId, toAccount.Balance);
+        await _bankTransactionRepository.UpdateBalanceAsync(fromAccountId, fromAccount.Balance);
+        await _bankTransactionRepository.UpdateBalanceAsync(toAccountId, toAccount.Balance);
         var transaction = new BankTransaction
         {
             FromAccountId = fromAccountId,
@@ -89,7 +89,7 @@ public class BankTransactionService : IBankTransactionService
             BankTransactionType = BankTransactionType.Deposit,
             CreatedAt = DateTime.UtcNow,
         };
-        await _bankTransactionRepository.AddTransactionAsync(transaction);
+        await _bankTransactionRepository.CreateAsync(transaction);
         return ReadDto(transaction);
     }
 
@@ -105,7 +105,7 @@ public class BankTransactionService : IBankTransactionService
             throw new InvalidOperationException("Insufficient funds.");
         }
         account.Balance -= amount;
-        await _bankTransactionRepository.UpdateAccountBalanceAsync(accountId, account.Balance);
+        await _bankTransactionRepository.UpdateBalanceAsync(accountId, account.Balance);
         var transaction = new BankTransaction
         {
             AccountId = accountId,
@@ -113,7 +113,7 @@ public class BankTransactionService : IBankTransactionService
             BankTransactionType = BankTransactionType.Deposit,
             CreatedAt = DateTime.UtcNow,
         };
-        await _bankTransactionRepository.AddTransactionAsync(transaction);
+        await _bankTransactionRepository.CreateAsync(transaction);
         return ReadDto(transaction);
     }
 

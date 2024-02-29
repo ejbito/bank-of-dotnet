@@ -5,8 +5,8 @@ namespace BankofDotNet.Services.Interfaces;
 
 public interface IUserService
 {
-    Task<(IdentityResult result, Guid userId)> RegisterUserAsync(UserCreateDto userCreateDto);
-    Task<UserReadDto> GetUserProfileAsync(Guid userId);
-    Task<IdentityResult> UpdateUserPasswordAsync(Guid userId, UserUpdatePasswordDto userUpdatePasswordDto);
-    Task<IdentityResult> DeleteUserAsync(Guid userId);
+    Task<(IdentityResult Result, Guid UserId)> RegisterAsync(UserCreateDto dto);
+    Task<UserReadDto> GetProfileAsync(Guid userId);
+    Task<IdentityResult> UpdatePasswordAsync(Guid userId, UserUpdatePasswordDto dto);
+    Task<IdentityResult> DeleteAsync(Guid userId);
 }

@@ -17,7 +17,7 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public async Task<IdentityResult> DeleteUserAsync(Guid userId)
+    public async Task<IdentityResult> DeleteAsync(Guid userId)
     {
         var user = await _userRepository.FindByIdAsync(userId);
         if (user == null)
@@ -27,7 +27,7 @@ public class UserService : IUserService
         return await _userRepository.DeleteAsync(user);
     }
 
-    public async Task<UserReadDto> GetUserProfileAsync(Guid userId)
+    public async Task<UserReadDto> GetProfileAsync(Guid userId)
     {
         var user = await _userRepository.FindByIdAsync(userId);
         if (user == null)
@@ -43,19 +43,19 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<(IdentityResult result, Guid userId)> RegisterUserAsync(UserCreateDto userCreateDto)
+    public async Task<(IdentityResult Result, Guid UserId)> RegisterAsync(UserCreateDto dto)
     {
         var user = new User
         {
-            FirstName = userCreateDto.FirstName,
-            LastName = userCreateDto.LastName,
-            Email = userCreateDto.Email,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            Email = dto.Email,
         };
-        var result = await _userRepository.CreateAsync(user, userCreateDto.Password);
+        var result = await _userRepository.CreateAsync(user, dto.Password);
         return (result, user.Id);
     }
 
-    public async Task<IdentityResult> UpdateUserPasswordAsync(Guid userId, UserUpdatePasswordDto userUpdatePasswordDto)
+    public async Task<IdentityResult> UpdatePasswordAsync(Guid userId, UserUpdatePasswordDto userUpdatePasswordDto)
     {
         var user = await _userRepository.FindByIdAsync(userId);
         if (user == null)

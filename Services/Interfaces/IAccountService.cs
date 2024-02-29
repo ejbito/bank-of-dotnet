@@ -4,11 +4,11 @@ namespace BankofDotNet.Services.Interfaces;
 
 public interface IAccountService
 {
-    Task<AccountReadDto> CreateAccountAsync(Guid userId, AccountCreateDto accountCreateDto);
-    Task<IEnumerable<AccountReadDto>> GetUserAccountsAsync(Guid userId);
-    Task<AccountReadDto> GetAccountByIdAsync(Guid accountId);
-    Task<bool> UpdateAcountAsync(Guid accountId, Guid userId, AccountUpdateDto accountUpdateDto);
-    Task<bool> UpdateAccountPinAsync(Guid accountId, Guid userId, AccountUpdatePinDto accountPinDto);
-    Task<bool> DeleteAccountAsync(Guid accountId, Guid userId);
+    Task<AccountReadDto> CreateAsync(Guid userId, AccountCreateDto dto);
+    Task<IEnumerable<AccountReadDto>> GetAllByUserIdAsync(Guid userId);
+    Task<AccountReadDto> GetByIdAsync(Guid accountId);
+    Task<bool> UpdateAsync(Guid accountId, Guid userId, AccountUpdateDto dto);
+    Task<bool> UpdatePinAsync(Guid accountId, Guid userId, AccountUpdatePinDto accountPinDto);
+    Task<bool> DeleteAsync(Guid accountId, Guid userId);
     Task<(string BSB, string ACC)> GenerateUniqueBSBAndACCAsync();
 }
