@@ -35,11 +35,11 @@ namespace BankofDotNet.Controllers
         }
 
 
-        [HttpPost("signIn")]
+        [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> SignIn(AuthenticationLoginDto dto)
+        public async Task<IActionResult> Login(AuthenticationLoginDto dto)
         {
-            var token = await _authenticationService.SignInAsync(dto.Email, dto.Password);
+            var token = await _authenticationService.LoginAsync(dto.Email, dto.Password);
             if (string.IsNullOrEmpty(token))
             {
                 return Unauthorized("Invalid login attempt.");

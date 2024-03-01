@@ -25,19 +25,20 @@ public class AuthenticationService : IAuthenticationService
         _configuration = configuration;
     }
 
-    public async Task<(IdentityResult Result, Guid UserId)> RegisterAsync(UserCreateDto dto)
+    public async Task<(IdentityResult Result, Guid UserId)> RegisterAsync(AuthenticationCreateDto dto)
     {
         var user = new User
         {
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             Email = dto.Email,
+            UserName = dto.Email,
         };
         var result = await _userRepository.CreateAsync(user, dto.Password);
         return (result, user.Id);
     }
 
-    public async Task<string> SignInAsync(string username, string password)
+    public async Task<string> LoginAsync(string username, string password)
     {
         var user = await _userRepository.FindByEmailAsync(username);
         if (user != null && await _userManager.CheckPasswordAsync(user, password))
