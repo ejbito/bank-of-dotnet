@@ -1,4 +1,5 @@
 ﻿using BankofDotNet.Repository;
+using BankofDotNet.Repository.Interface;
 using BankofDotNet.Services.Interfaces;
 using BankOfDotNet.Models;
 using Microsoft.AspNetCore.Identity;
@@ -13,10 +14,10 @@ namespace BankofDotNet.Services;
 public class AuthenticationService : IAuthenticationService
 {
     private readonly UserManager<User> _userManager;
-    private readonly UserRepository _userRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IConfiguration _configuration;
 
-    public AuthenticationService(UserManager<User> userManager, UserRepository userRepository, IConfiguration configuration)
+    public AuthenticationService(UserManager<User> userManager, IUserRepository userRepository, IConfiguration configuration)
     {
         _userManager = userManager;
         _userRepository = userRepository;

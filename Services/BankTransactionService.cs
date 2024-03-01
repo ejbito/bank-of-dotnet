@@ -1,5 +1,6 @@
 ﻿using BankofDotNet.DTOs.BankTransaction;
 using BankofDotNet.Repository;
+using BankofDotNet.Repository.Interface;
 using BankofDotNet.Services.Interfaces;
 using BankOfDotNet.Enums;
 using BankOfDotNet.Models;
@@ -12,10 +13,10 @@ namespace BankofDotNet.Services;
 
 public class BankTransactionService : IBankTransactionService
 {
-    private readonly BankTransactionRepository _bankTransactionRepository;
-    private readonly AccountRepository _accountRepository;
+    private readonly IBankTransactionRepository _bankTransactionRepository;
+    private readonly IAccountRepository _accountRepository;
 
-    public BankTransactionService(BankTransactionRepository bankTransactionRepository, AccountRepository accountRepository)
+    public BankTransactionService(IBankTransactionRepository bankTransactionRepository, IAccountRepository accountRepository)
     {
         _bankTransactionRepository = bankTransactionRepository;
         _accountRepository = accountRepository;

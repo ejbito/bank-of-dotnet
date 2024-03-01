@@ -1,5 +1,6 @@
 ﻿using BankofDotNet.DTOs.User;
 using BankofDotNet.Repository;
+using BankofDotNet.Repository.Interface;
 using BankofDotNet.Services.Interfaces;
 using BankOfDotNet.Models;
 using Microsoft.AspNetCore.Identity;
@@ -9,9 +10,9 @@ namespace BankofDotNet.Services;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
-    private readonly UserRepository _userRepository;
+    private readonly IUserRepository _userRepository;
 
-    public UserService(UserManager<User> userManager, UserRepository userRepository)
+    public UserService(UserManager<User> userManager, IUserRepository userRepository)
     {
         _userManager = userManager;
         _userRepository = userRepository;

@@ -1,5 +1,3 @@
-using BankofDotNet.Repositories;
-using BankofDotNet.Repositories.Interfaces;
 using BankofDotNet.Repository;
 using BankofDotNet.Repository.Interface;
 using BankofDotNet.Services;
@@ -21,7 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Configure Logging
 
 // Configure Identity + User Model
-builder.Services.AddIdentity<User, IdentityRole<Guid>>() // IdentityRole for string keys
+builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
@@ -32,7 +30,6 @@ builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IBankTransactionRepository, BankTransactionRepository>();
-builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 
 // Configure Services
 builder.Services.AddScoped<IUserService, UserService>();

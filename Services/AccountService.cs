@@ -1,6 +1,7 @@
 ﻿using BankofDotNet.DTOs.Account;
 using BankofDotNet.DTOs.BankTransaction;
 using BankofDotNet.Repository;
+using BankofDotNet.Repository.Interface;
 using BankofDotNet.Services.Interfaces;
 using BankOfDotNet.Data;
 using BankOfDotNet.Models;
@@ -13,12 +14,12 @@ namespace BankofDotNet.Services;
 
 public class AccountService : IAccountService
 {
-    private readonly AccountRepository _accountRepository;
-    private readonly UserRepository _userRepository;
+    private readonly IAccountRepository _accountRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher<User> _passwordHasher;
     private Random _random = new Random();
 
-    public AccountService(AccountRepository accountRepository, UserRepository userRepository, IPasswordHasher<User> passwordHasher)
+    public AccountService(IAccountRepository accountRepository, IUserRepository userRepository, IPasswordHasher<User> passwordHasher)
     {
         _accountRepository = accountRepository;
         _userRepository = userRepository;
