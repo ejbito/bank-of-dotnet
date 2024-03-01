@@ -9,12 +9,10 @@ namespace BankofDotNet.Services;
 
 public class UserService : IUserService
 {
-    private readonly UserManager<User> _userManager;
     private readonly IUserRepository _userRepository;
 
-    public UserService(UserManager<User> userManager, IUserRepository userRepository)
+    public UserService(IUserRepository userRepository)
     {
-        _userManager = userManager;
         _userRepository = userRepository;
     }
 
@@ -42,18 +40,6 @@ public class UserService : IUserService
             LastName = user.LastName,
             Email = user.Email,
         };
-    }
-
-    public async Task<(IdentityResult Result, Guid UserId)> RegisterAsync(UserCreateDto dto)
-    {
-        var user = new User
-        {
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
-            Email = dto.Email,
-        };
-        var result = await _userRepository.CreateAsync(user, dto.Password);
-        return (result, user.Id);
     }
 
     public async Task<IdentityResult> UpdatePasswordAsync(Guid userId, UserUpdatePasswordDto userUpdatePasswordDto)

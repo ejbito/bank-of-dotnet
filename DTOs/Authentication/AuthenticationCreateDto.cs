@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BankofDotNet.DTOs.User;
+namespace BankofDotNet.DTOs.Authentication;
 
-public class UserCreateDto
+public class AuthenticationCreateDto
 {
     [Required]
     [MaxLength(50)]

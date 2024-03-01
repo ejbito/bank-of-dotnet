@@ -1,4 +1,5 @@
-﻿using BankofDotNet.Repository;
+﻿using BankofDotNet.DTOs.Authentication;
+using BankofDotNet.Repository;
 using BankofDotNet.Repository.Interface;
 using BankofDotNet.Services.Interfaces;
 using BankOfDotNet.Models;
@@ -22,6 +23,18 @@ public class AuthenticationService : IAuthenticationService
         _userManager = userManager;
         _userRepository = userRepository;
         _configuration = configuration;
+    }
+
+    public async Task<(IdentityResult Result, Guid UserId)> RegisterAsync(UserCreateDto dto)
+    {
+        var user = new User
+        {
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            Email = dto.Email,
+        };
+        var result = await _userRepository.CreateAsync(user, dto.Password);
+        return (result, user.Id);
     }
 
     public async Task<string> SignInAsync(string username, string password)
