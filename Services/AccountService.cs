@@ -65,7 +65,7 @@ public class AccountService : IAccountService
         {
             throw new KeyNotFoundException();
         }
-        if (account.UserId == userId)
+        if (account.UserId != userId)
         {
             throw new UnauthorizedAccessException("You do not have permission to update this account.");
         }
@@ -114,7 +114,7 @@ public class AccountService : IAccountService
         {
             throw new KeyNotFoundException();
         }
-        if (account.UserId == userId)
+        if (account.UserId != userId)
         {
             throw new UnauthorizedAccessException("You do not have permission to update this account.");
         }
@@ -137,7 +137,7 @@ public class AccountService : IAccountService
         {
             throw new KeyNotFoundException();
         }
-        if (account.UserId == userId)
+        if (account.UserId != userId)
         {
             throw new UnauthorizedAccessException("You do not have permission to update this account.");
         }

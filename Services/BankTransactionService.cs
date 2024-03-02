@@ -29,10 +29,6 @@ public class BankTransactionService : IBankTransactionService
         {
             throw new KeyNotFoundException("Account not found.");
         }
-        if (account.Balance < amount)
-        {
-            throw new InvalidOperationException("Insufficient funds.");
-        }
         account.Balance += amount;
         await _bankTransactionRepository.UpdateBalanceAsync(accountId, account.Balance);
         var transaction = new BankTransaction
@@ -69,7 +65,7 @@ public class BankTransactionService : IBankTransactionService
     public async Task<BankTransactionReadDto> TransferAsync(Guid fromAccountId, Guid toAccountId, decimal amount)
     {
         var fromAccount = await _accountRepository.FindByIdAsync(fromAccountId);
-        var toAccount = await _accountRepository.FindByIdAsync(fromAccountId);
+        var toAccount = await _accountRepository.FindByIdAsync(toAccountId);
         if (fromAccount == null || toAccount == null)
         {
             throw new KeyNotFoundException("Account not found.");
@@ -84,10 +80,11 @@ public class BankTransactionService : IBankTransactionService
         await _bankTransactionRepository.UpdateBalanceAsync(toAccountId, toAccount.Balance);
         var transaction = new BankTransaction
         {
+            AccountId = fromAccountId,
             FromAccountId = fromAccountId,
             ToAccountId = toAccountId,
             Amount = amount,
-            BankTransactionType = BankTransactionType.Deposit,
+            BankTransactionType = BankTransactionType.Transfer,
             CreatedAt = DateTime.UtcNow,
         };
         await _bankTransactionRepository.CreateAsync(transaction);

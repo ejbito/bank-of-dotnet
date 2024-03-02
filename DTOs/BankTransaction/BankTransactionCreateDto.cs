@@ -9,5 +9,5 @@ public class BankTransactionCreateDto
 
     [Required]
     [Range(0.01, double.MaxValue, ErrorMessage = "Amount must be greater than 0.")]
-    public string Amount { get; set; }
+    public decimal Amount { get; set; }
 }
