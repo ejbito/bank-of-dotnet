@@ -17,6 +17,11 @@ public class BankTransactionRepository : IBankTransactionRepository
 
     public async Task<BankTransaction> CreateAsync(BankTransaction transaction)
     {
+        if (transaction == null)
+        {
+            throw new ArgumentNullException(nameof(transaction), "Transaction cannot be null.");
+        }
+
         _context.BankTransactions.Add(transaction);
         await _context.SaveChangesAsync();
         return transaction;
@@ -27,7 +32,7 @@ public class BankTransactionRepository : IBankTransactionRepository
         var transaction = await _context.BankTransactions.FindAsync(transactionId);
         if (transaction == null)
         {
-            throw new KeyNotFoundException("Account not found.");
+            throw new KeyNotFoundException($"Transaction with ID {transactionId} not found.");
         }
         return transaction;
     }
@@ -42,10 +47,12 @@ public class BankTransactionRepository : IBankTransactionRepository
     public async Task UpdateBalanceAsync(Guid accountId, decimal newBalance)
     {
         var account = await _context.Accounts.FindAsync(accountId);
-        if (account != null)
+        if (account == null)
         {
-            account.Balance = newBalance;
-            await _context.SaveChangesAsync();
+            throw new KeyNotFoundException($"Account with ID {accountId} not found.");
         }
+
+        account.Balance = newBalance;
+        await _context.SaveChangesAsync();
     }
 }

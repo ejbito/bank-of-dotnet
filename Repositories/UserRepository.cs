@@ -15,27 +15,69 @@ namespace BankofDotNet.Repository
 
         public async Task<IdentityResult> CreateAsync(User user, string password)
         {
-            return await _userManager.CreateAsync(user, password);
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user), "User cannot be null.");
+            }
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentException("Password cannot be null or whitespace.", nameof(password));
+            }
+
+            var result = await _userManager.CreateAsync(user, password);
+            return result;
         }
 
         public async Task<IdentityResult> DeleteAsync(User user)
         {
-            return await _userManager.DeleteAsync(user);
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user), "User cannot be null for deletion.");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            return result;
         }
 
         public async Task<User> FindByEmailAsync(string email)
         {
-            return await _userManager.FindByEmailAsync(email);
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentException("Email cannot be null or whitespace.", nameof(email));
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            return user;
         }
 
         public async Task<User> FindByIdAsync(Guid userId)
         {
-            return await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"User with ID {userId} not found.");
+            }
+
+            return user;
         }
 
         public async Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword)
         {
-            return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user), "User cannot be null for password change.");
+            }
+            if (string.IsNullOrWhiteSpace(currentPassword))
+            {
+                throw new ArgumentException("Current password cannot be null or whitespace.", nameof(currentPassword));
+            }
+            if (string.IsNullOrWhiteSpace(newPassword))
+            {
+                throw new ArgumentException("New password cannot be null or whitespace.", nameof(newPassword));
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+            return result;
         }
     }
 }
