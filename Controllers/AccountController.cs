@@ -92,7 +92,7 @@ namespace BankofDotNet.Controllers
             }
         }
 
-        [HttpPost("update/{accountId}")]
+        [HttpPatch("update/{accountId}")]
         public async Task<IActionResult> Update(string accountId, [FromBody] AccountUpdateDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -115,7 +115,7 @@ namespace BankofDotNet.Controllers
             }
         }
 
-        [HttpPost("updatePin/{accountId}")]
+        [HttpPatch("updatePin/{accountId}")]
         public async Task<IActionResult> UpdatePin(string accountId, [FromBody] AccountUpdatePinDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
